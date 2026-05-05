@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cek Dana — Verifikasi NIK</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#0a1628 0%,#1a3a6b 60%,#c8a000 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#fff;border-radius:24px;padding:36px 32px;max-width:420px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,.4);text-align:center}
+.badge{display:inline-block;background:linear-gradient(90deg,#c8a000,#ffd700);color:#0a1628;font-weight:900;font-size:.75em;padding:4px 16px;border-radius:20px;letter-spacing:1px;margin-bottom:16px}
+.icon{font-size:3em;margin-bottom:8px}
+h1{font-size:1.05em;font-weight:900;color:#0a1628;line-height:1.4;margin-bottom:6px}
+.sub{color:#555;font-size:.82em;display:block;margin-bottom:28px}
+label{display:block;text-align:left;font-size:.78em;font-weight:700;color:#0a1628;margin-bottom:6px;letter-spacing:.5px}
+input{width:100%;padding:16px;font-size:2em;text-align:center;border:2.5px solid #e0e0e0;border-radius:14px;margin-bottom:18px;letter-spacing:.5em;font-family:inherit;font-weight:700;color:#0a1628;transition:border .2s}
+input:focus{outline:none;border-color:#c8a000;box-shadow:0 0 0 3px rgba(200,160,0,.15)}
+button{width:100%;padding:16px;background:linear-gradient(90deg,#0a1628,#1a3a6b);color:#ffd700;border:none;border-radius:14px;font-size:1em;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:all .2s}
+button:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,22,40,.3)}
+#result{margin-top:20px;padding:22px;border-radius:16px;display:none;animation:pop .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.ok{background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border:2px solid #43a047;color:#1b5e20}
+.err{background:linear-gradient(135deg,#fff3e0,#fce4ec);border:2px solid #ef5350;color:#b71c1c}
+.ok h2,.err h2{font-size:1em;margin-bottom:10px;font-weight:800}
+.ok p,.err p{font-size:.85em;line-height:1.7}
+.stamp{font-size:2.2em;display:block;margin-bottom:8px}
+.limit-amt{font-size:1.6em;font-weight:900;color:#1b5e20;display:block;margin:6px 0}
+.footer{margin-top:24px;font-size:.72em;color:#aaa}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="badge">🔒 PROGRAM EKSKLUSIF</div>
+  <div class="icon">🏦</div>
+  <h1>MASUKKAN 4 DIGIT TERAKHIR NIK ANDA UNTUK KLAIM DANA S/D 200 JUTA</h1>
+  <span class="sub">Program Dana Tunai — Undangan Terpilih</span>
+  <label>4 DIGIT TERAKHIR NIK ANDA</label>
+  <input id="nik" type="tel" maxlength="4" placeholder="_ _ _ _" oninput="this.value=this.value.replace(/\D/g,'')">
+  <button onclick="cek()">✅ CEK ELIGIBILITAS SAYA</button>
+  <div id="result"></div>
+  <div class="footer">Data Anda aman &amp; terenkripsi</div>
+</div>
+<script>
+var db = {
+  "7890": ["Hilmun", "50 Jt"],
+  "7891": ["Erik",   "100 Jt"],
+  "7892": ["Budi",   "75 Jt"],
+  "7893": ["Raja",   "50 Jt"],
+  "7894": ["Iwan",   "100 Jt"]
+};
+function cek() {
+  var v = document.getElementById("nik").value;
+  var r = document.getElementById("result");
+  if (v.length < 4) { alert("Masukkan 4 digit terakhir NIK Anda"); return; }
+  r.style.display = "block";
+  var x = db[v];
+  if (x) {
+    var tgl = new Date().toLocaleDateString("id-ID", {day:"2-digit",month:"long",year:"numeric"});
+    r.className = "ok";
+    r.innerHTML = '<span class="stamp">🎉</span>'
+      + '<h2>Selamat Bpk/Ibu <u>' + x[0] + '</u>!</h2>'
+      + '<p>Anda telah <b>APPROVED</b> untuk limit dana sebesar'
+      + '<span class="limit-amt">' + x[1] + '</span>'
+      + 'Tim kami akan <b>menghubungi via WhatsApp</b> untuk proses pencairan.<br><br>'
+      + '📅 Tanggal: <b>' + tgl + '</b><br><br>'
+      + '💾 <b>Screenshot / Simpan bukti ini</b></p>';
+  } else {
+    r.className = "err";
+    r.innerHTML = '<span class="stamp">❌</span>'
+      + '<h2>Data Tidak Cocok</h2>'
+      + '<p>Mohon maaf, NIK Anda tidak terdaftar dalam program ini.<br><br>'
+      + 'Program ini <b>khusus Undangan Terpilih</b>.<br>'
+      + 'Hubungi tim kami jika merasa ada kesalahan.</p>';
+  }
+}
+</script>
+</body>
+</html>
